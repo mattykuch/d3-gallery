@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bar Chart Race - D3.js Visualization</title>
+
+    <link rel="stylesheet" type="text/css" href="../styles/bar-chart-race.css">
+
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">D3 Portfolio</div>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../about.html">About</a></li>
+                <li><a href="https://github.com/mattykuch" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="viz-container">
+            <div class="viz-header">
+                <h1>Bar Chart Race Visualization</h1>
+                <p>An animated visualization showing changing values over time for the top 10 categories.</p>
+                
+                <div class="metadata">
+                    <div><strong>Created:</strong> February 15, 2025</div>
+                    <div><strong>Data Source:</strong> Sample GDP Data 2000-2020</div>
+                    <div><strong>D3.js Version:</strong> 7.8.5</div>
+                </div>
+                
+                <div class="tags">
+                    <span class="tag">D3.js</span>
+                    <span class="tag">Animation</span>
+                    <span class="tag">Time Series</span>
+                    <span class="tag">Bar Chart</span>
+                </div>
+            </div>
+            
+            <div class="viz-display" id="visualization">
+                <!-- D3 visualization will render here -->
+            </div>
+            
+            <div class="viz-controls">
+                <div class="control-group">
+                    <button id="play-btn">Play Animation</button>
+                    <button id="reset-btn" class="secondary">Reset</button>
+                </div>
+                
+                <div class="control-group">
+                    <label for="speed">Speed:</label>
+                    <input type="range" id="speed" min="1" max="10" value="5">
+                </div>
+                
+                <div class="control-group">
+                    <label for="year-select">Jump to Year:</label>
+                    <select id="year-select">
+                        <option value="2000">2000</option>
+                        <option value="2005">2005</option>
+                        <option value="2010">2010</option>
+                        <option value="2015">2015</option>
+                        <option value="2020">2020</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="viz-description">
+                <h2>About This Visualization</h2>
+                <p>This bar chart race shows the changing economic landscape over two decades, from 2000 to 2020. Each bar represents a country, with length proportional to its GDP. As the animation progresses, you can observe how economic power shifts between nations.</p>
+                
+                <div class="insights">
+                    <h3>Key Insights</h3>
+                    <ul>
+                        <li>The rapid economic rise of China becomes evident around 2010</li>
+                        <li>Traditional economic powers show more stable, gradual growth</li>
+                        <li>Economic recessions (2008) create visible dips across most countries</li>
+                    </ul>
+                </div>
+                
+                <div class="code-section">
+                    <h3>Implementation Highlights</h3>
+                    <p>The visualization uses D3's transition capabilities to animate between states. The key techniques used include:</p>
+                    
+                    <pre><code>// Key implementation code
+function updateBars(year) {
+  // Get data for the current year
+  const yearData = dataset.filter(d => d.year === year)
+    .sort((a, b) => b.value - a.value)
+    .slice(0, 10);
+    
+  // Join data to bars
+  const bars = svg.selectAll(".bar")
+    .data(yearData, d => d.name);
+    
+  // Exit old bars
+  bars.exit()
+    .transition()
+    .duration(transitionDuration)
+    .attr("width", 0)
+    .remove();
+    
+  // Update existing bars
+  bars.transition()
+    .duration(transitionDuration)
+    .attr("y", (d, i) => i * barHeight)
+    .attr("width", d => xScale(d.value));
+    
+  // Enter new bars
+  bars.enter()
+    .append("rect")
+    .attr("class", "bar")
+    .attr("y", (d, i) => i * barHeight)
+    .attr("height", barHeight - 5)
+    .attr("x", 0)
+    .attr("width", 0)
+    .attr("fill", d => colorScale(d.name))
+    .transition()
+    .duration(transitionDuration)
+    .attr("width", d => xScale(d.value));
+}</code></pre>
+                </div>
+                
+                <div class="resources">
+                    <h3>Resources & Further Reading</h3>
+                    <ul>
+                        <li><a href="https://github.com/d3/d3/blob/main/API.md#transitions-d3-transition" target="_blank">D3.js Transition Documentation</a></li>
+                        <li><a href="https://observablehq.com/@d3/bar-chart-race" target="_blank">Observable HQ: Bar Chart Race Example</a></li>
+                        <li><a href="https://www.youtube.com/watch?v=BpkiS0lBqsE" target="_blank">Tutorial: Creating Animated Charts with D3</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>© 2025 Matthew Kuch | Built with D3.js</p>
+        <p>Connect with me: 
+            <a href="https://twitter.com/yourusername" style="color: white;">Twitter</a> | 
+            <a href="https://linkedin.com/in/yourusername" style="color: white;">LinkedIn</a>
+        </p>
+    </footer>
+
+    <!-- JS Libraries / Code -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="../scripts/bar-chart-race.js"></script>
+    
+</body>
+</html>

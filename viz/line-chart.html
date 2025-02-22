@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3 Line Chart</title>
+
+    <link rel="stylesheet" type="text/css" href="../styles/line-chart.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">D3 Portfolio</div>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../about.html">About</a></li>
+                <li><a href="https://github.com/mattykuch" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="viz-container">
+        <div class="viz-header">
+            <h1>Line Chart - NYC Weather 2018 vs 2021 - Can we spot global warming?</h1>
+            <p>An static visualization showing NYC temperatures for a full year in 2018 versus 2021</p>
+            
+            <div class="metadata">
+                <div><strong>Created:</strong> February 21, 2025</div>
+                <div><strong>Data Source:</strong> NYC Weather Data 2018</div>
+                <div><strong>D3.js Version:</strong> 7.8.5</div>
+            </div>
+            
+            <div class="tags">
+                <span class="tag">D3.js</span>              
+                <span class="tag">Time Series</span>
+                <span class="tag">Line Chart</span>
+            </div>
+        </div>
+        
+        <div class="viz-display" id="line-chart-1">
+            <!-- 1st line chart will render here -->
+        </div>
+        <div class="viz-display" id="line-chart-2">
+            <!-- 2nd line chart will render here -->
+        </div>
+
+        <div class="viz-description">
+            <h2>About This Visualization</h2>
+            <p>This line chart shows the comparative temperature in NYC for 2 years (2018 versus 2021).I visited NYC in the summer of 2016 and was always curious what the weather was like the rest of the year. It was such a hot and humid summer when I visited.</p>
+            
+            <div class="insights">
+                <h3>Key Insights</h3>
+                <ul>
+                    <li>Summers are hot and humid</li>
+                    <li>Winter in NYC is usually cold, but more often it seems not to go below zero (i.e. 32 F).</li>
+                    <li>In 2021, the winter temperature didnt drop below 32 F - is this a sign of global warming?</li>                    
+                </ul>
+            </div>
+
+            <div class="resources">
+                <h3>Resources & Further Reading</h3>
+                <ul>
+                    <li><a href="https://dec.ny.gov/environmental-protection/climate-change/effects-impacts#:~:text=Over%20the%20last%20century%2C%20average,three%20times%20faster%20than%20summers." target="_blank">New York State - Climate Change Effects and Impacts</a></li>
+                    <li><a href="https://climate.nasa.gov/news/3140/2021-tied-for-6th-warmest-year-in-continued-trend-nasa-analysis-shows/" target="_blank">2021 Tied for 6th Warmest Year in Continued Trend, NASA Analysis Shows</a></li>
+                </ul>
+            </div>
+
+    </section>
+
+    
+</body>
+
+<footer>
+    <p>© 2025 Matthew Kuch | Built with D3.js</p>
+    <p>Connect with me: 
+        <a href="https://twitter.com/matthewkuch" style="color: white;">Twitter</a> | 
+        <a href="https://linkedin.com/in/matthew-k-ab0134122" style="color: white;">LinkedIn</a>
+    </p>
+</footer>
+
+<!-- JS Libraries / Code -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="../scripts/line-chart-nyc-2018.js"></script>
+<script src="../scripts/line-chart-nyc-2021.js"></script>
+
+</html>

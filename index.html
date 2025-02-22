@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3.js Visualization Portfolio</title>
+    <link rel="stylesheet" type="text/css" href="styles/base.css">
+	<link rel="stylesheet" type="text/css" href="">
+
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">D3 Portfolio</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="https://github.com/mattykuch" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="intro">
+            <h1>Data Visualization Portfolio</h1>
+            <p>Exploring the power of D3.js through interactive data visualizations</p>
+        </section>
+        
+        <section class="visualization-grid">
+            <!-- Example Card 1 -->
+            <article class="viz-card">
+                <div class="viz-preview">
+                    <img src="./assets/bar-chart-race.jpg" width="550" height="200">
+                    <!-- D3 visualization will be rendered here -->
+                </div>
+                <div class="viz-info">
+                    <h3>Bar Chart Race</h3>
+                    <p>Animated visualization showing changing values over time</p>
+                    <div class="viz-tags">
+                        <span class="tag">D3.js</span>
+                        <span class="tag">Animation</span>
+                        <span class="tag">Time Series</span>
+                    </div>
+                    <a href="viz/bar-chart-race.html">View Full Project</a>
+                </div>
+            </article>
+            
+            <!-- Example Card 2 -->
+            <article class="viz-card">
+                <div class="viz-preview" id="preview-2">
+                    <img src="./assets/line-chart.jpg" width="550" height="200">
+                    <!-- D3 visualization will be rendered here -->
+                </div>
+                <div class="viz-info">
+                    <h3>Line Chart</h3>
+                    <p>A static visualization of time series data</p>
+                    <div class="viz-tags">
+                        <span class="tag">D3.js</span>
+                        <span class="tag">Line Chart</span>
+                        <span class="tag">Static</span>
+                    </div>
+                    <a href="viz/line-chart.html">View Full Project</a>
+                </div>
+            </article>
+            
+            <!-- Example Card 3 -->
+            <article class="viz-card">
+                <div class="viz-preview" id="preview-3">
+                    <!-- D3 visualization will be rendered here -->
+                </div>
+                <div class="viz-info">
+                    <h3>Choropleth Map</h3>
+                    <p>Geographic data visualization with color-coded regions</p>
+                    <div class="viz-tags">
+                        <span class="tag">D3.js</span>
+                        <span class="tag">GeoJSON</span>
+                        <span class="tag">Mapping</span>
+                    </div>
+                    <a href="viz/choropleth.html">View Full Project</a>
+                </div>
+            </article>
+        </section>
+    </main>
+    
+    <footer>
+        <p>© 2025 Matthew Kuch | Built with D3.js</p>
+        <p>Connect with me: 
+            <a href="https://twitter.com/@matthewkuch" style="color: white;">Twitter</a> | 
+            <a href="https://www.linkedin.com/in/matthew-k-ab0134122/" style="color: white;">LinkedIn</a>
+        </p>
+    </footer>
+
+    <!-- JS Libraries -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+</body>
+</html>
