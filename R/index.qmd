@@ -1,0 +1,159 @@
+---
+title: <span style="color:white">Weather Patterns in Kiziri - A Tale of Two Years</span>
+subtitle: "Understanding the Shifts in Climate at JC Farms"
+
+author: 
+- name: "Matthew Kuch"
+  email: kuch.matthew@gmail.com
+date: 02/24/2024
+
+title-block-banner: true
+title-block-banner-color: "black"
+
+format: html
+html:
+code-fold: false
+code-summary: "Code"
+execute: 
+  warning: false
+  message: false
+  echo: false
+css: style.css
+toc: true
+toc-location: left
+number-sections: false
+editor: visual
+fig-cap-location: margin
+---
+
+```{r warning=FALSE, message=FALSE}
+
+# Load necessary packages
+library(tidyverse)
+library(lubridate)
+library(highcharter)
+
+
+```
+
+*"Poultry flocks are particularly vulnerable to climate change because birds can only tolerate narrow temperature ranges"* – The Poultry Site, 2009
+
+If you were to stand in the middle of **Kiziri**, the neighborhood where **JC Farms** is located, and close your eyes, what would you feel? Maybe the sun warming your skin in the early morning, the humidity clinging to the air, or the occasional cool breeze sneaking through the trees. If you stood there long enough—day after day, year after year—you’d start to notice something: the rhythm of the weather, the subtle (and sometimes not-so-subtle) shifts that shape the world around you.
+
+Numbers tell stories, but they whisper at first. Only when you step back do you see the broader picture.
+
+I spent some time analyzing temperature data from **2020** and **2024**—two years, four years apart, but connected by the same land, the same sky. What I found wasn’t just numbers. It was a pattern, a story of change, and perhaps a small warning about what lies ahead.
+
+```{r}
+# 1. Temperature Trends over time
+
+
+# Load the datasets
+df_2020 <- read.csv("./data/kiziri/open-meteo-0.60N32.66E1137m_2020.csv", skip = 3)
+df_2024 <- read.csv("./data/kiziri/open-meteo-0.60N32.66E1137m_2024.csv", skip = 3)
+
+# Rename columns
+colnames(df_2020) <- colnames(df_2024) <- c("time", "temperature_2m_C", "relative_humidity_2m", 
+                                            "dew_point_2m_C", "precipitation_mm", "rain_mm")
+
+# Convert time column to Date format
+df_2020$time <- as.Date(df_2020$time)
+df_2024$time <- as.Date(df_2024$time)
+
+# Convert the temperature column to numeric
+df_2020$temperature_2m_C <- as.numeric(df_2020$temperature_2m_C)
+df_2024$temperature_2m_C <- as.numeric(df_2024$temperature_2m_C)
+
+# Aggregate by daily mean
+df_2020_daily <- df_2020 |> 
+  group_by(time) |> 
+  summarise(temperature = mean(temperature_2m_C, na.rm = TRUE))
+
+df_2024_daily <- df_2024 |> 
+  group_by(time) |> 
+  summarise(temperature = mean(temperature_2m_C, na.rm = TRUE))
+
+# Merge data for plotting
+df_daily <- bind_rows(
+  mutate(df_2020_daily, year = "2020"),
+  mutate(df_2024_daily, year = "2024")
+)
+
+# Drop the NA in the df
+df_2020_daily <- na.omit(df_2020_daily)
+df_2024_daily <- na.omit(df_2024_daily)
+
+df_daily <- na.omit(df_daily)
+
+# Write csv for the key dataframes for easy reference later
+# write.csv(df_2020_daily,"./data/kiziri/kiziri_daily_temp_2020.csv")
+# write.csv(df_2024_daily,"./data/kiziri/kiziri_daily_temp_2024.csv")
+# write.csv(df_daily,"./data/kiziri/kiziri_daily_temp_2020_2024.csv")
+
+
+# GG Plot - static version
+ggplot(df_daily, aes(x = time, y = temperature, color = year)) +
+  geom_line() +
+  labs(title = "Daily Temperature Trends (2020 vs. 2024)", 
+       x = "Date", y = "Temperature (°C)") +
+  theme_minimal()
+
+# Highcharter - interactive version
+
+
+hchart(df_2020_daily, "line", hcaes(x=time, y=temperature), name = "2020 Daily Avg. Temperature", showInLegend = TRUE) |> 
+  hc_add_series(df_2024_daily,"line", hcaes(x=time, y=temperature), name = "2024 Daily Avg. Temperature", showInLegend = TRUE)
+  
+
+```
+
+### **A Slightly Warmer Kiziri**
+
+One number stands out: **22.2°C**. That’s the average temperature recorded in Kiziri in **2024**, compared to **21.5°C** in 2020. At first glance, a difference of **0.7°C** may seem trivial. But when you’re running a poultry farm, where temperature consistency can mean the difference between efficient feed conversion and heat stress in birds, it’s the kind of number that makes you pay attention.
+
+More importantly, the **standard deviation (variability) of temperatures increased** in 2024, meaning the swings between hot and cool days were more extreme. Poultry thrives in consistency—climate change, however, has other plans.
+
+### **The Shape of the Year: Monthly Temperature Trends**
+
+```{r}
+# 2. Monthly Temperature Averages
+
+```
+
+Breaking the data down by month, a clear pattern emerged:
+
+-   **2024 was generally warmer than 2020 across most months.**
+
+-   The biggest temperature spikes happened in the **dry season months of January and February**, and again in **June and July**.
+
+-   Interestingly, **March and April 2024 saw slightly cooler temperatures** than their 2020 counterparts—possibly a sign of increased rainfall, though that’s another dataset worth exploring.
+
+If you run a farm, this kind of information matters. Birds drink more water and eat less when it’s too hot. Heat stress can impact egg production, meat quality, and overall farm output. A shift of even a degree, when compounded over an entire season, can change productivity in ways that don’t always show up on a balance sheet—until they do.
+
+### **The New Normal: Extreme Temperature Events**
+
+Perhaps the most alarming change was in **temperature extremes**. In 2020, there were occasional spikes above **30°C**, but in 2024, these spikes became more frequent and prolonged.
+
+A good example: On **January 7, 2024**, temperatures hit **31.5°C**—higher than anything recorded on that same date four years earlier. That might not sound dramatic, but when it happens consistently, it changes everything.
+
+Think about how chickens react to extreme heat. Unlike humans, they can’t sweat to cool off. Instead, they pant, reduce movement, and eat less—responses that make sense for survival but are disastrous for farm productivity.
+
+### **Looking Ahead: What This Means for JC Farms**
+
+Here’s the real question: If this trend continues, what does it mean for **JC Farms** and for Kiziri?
+
+-   **Heat management will become more important.** More shade, better ventilation, and strategic watering will be necessary as temperatures fluctuate more aggressively.
+
+-   **The risk of heat waves is rising.** More extreme temperature events mean **higher mortality risks for poultry**, particularly for broilers, which are already heat-sensitive.
+
+-   **Understanding seasonality will be key.** The warmest months are shifting slightly, and knowing when to adjust farming practices (feed schedules, stocking density, etc.) could help mitigate stress on the birds.
+
+Farming is about adaptation. The land, the air, the climate—they don’t ask for permission before changing. They just do.
+
+And the best farmers? They don’t fight the change. They see it coming. They prepare.
+
+Kiziri’s climate is shifting. **Now we know.** The next step? **Figuring out what to do with that knowledge.**
+
+# References/Sources/Citations:
+
+-   <https://open-meteo.com/>
