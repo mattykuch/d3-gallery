@@ -87,5 +87,22 @@ async function drawLineChart2018() {
         .style("transform", `translateY(${
           dimensions.boundedHeight
         }px)`)
+        
+    // 6.2 Labelling axes
+
+    bounds
+    .append("text")
+    .text("Temperature (F)")
+    .attr("y", -5)
+    .style("font-size","12px");
+
+    bounds
+    .append("text")
+    .text("2018")
+    .attr("x", dimensions.width/3)
+    .attr("y", dimensions.height/5)
+    .style("opacity", 0.2)
+    .style("font-size","100px");
+
   }
   drawLineChart2018()

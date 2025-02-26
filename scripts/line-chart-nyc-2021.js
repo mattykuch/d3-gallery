@@ -97,7 +97,24 @@ async function drawLineChart2021() {
       .call(xAxisGenerator)
         .style("transform", `translateY(${ // This moves the xAxis from the top to the bottom of the screen
           dimensions.boundedHeight
-        }px)`)    
+        }px)`)
+        
+        
+    // 6.2 Labelling axes
+
+    bounds
+    .append("text")
+    .text("Temperature (F)")
+    .attr("y", -5)
+    .style("font-size","12px");
+
+    bounds
+    .append("text")
+    .text("2021")
+    .attr("x", dimensions.width/3)
+    .attr("y", dimensions.height/5)
+    .style("opacity", 0.2)
+    .style("font-size","100px");
 }
 
 drawLineChart2021();
