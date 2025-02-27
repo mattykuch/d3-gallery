@@ -64,14 +64,14 @@ df_2024$time <- as.Date(df_2024$time)
 df_2020$temperature_2m_C <- as.numeric(df_2020$temperature_2m_C)
 df_2024$temperature_2m_C <- as.numeric(df_2024$temperature_2m_C)
 
-# Aggregate by daily mean
+# Aggregate by daily max
 df_2020_daily <- df_2020 |> 
   group_by(time) |> 
-  summarise(temperature = mean(temperature_2m_C, na.rm = TRUE))
+  summarise(temperature = max(temperature_2m_C, na.rm = TRUE))
 
 df_2024_daily <- df_2024 |> 
   group_by(time) |> 
-  summarise(temperature = mean(temperature_2m_C, na.rm = TRUE))
+  summarise(temperature = max(temperature_2m_C, na.rm = TRUE))
 
 # Merge data for plotting
 df_daily <- bind_rows(
@@ -94,15 +94,15 @@ df_daily <- na.omit(df_daily)
 # GG Plot - static version
 ggplot(df_daily, aes(x = time, y = temperature, color = year)) +
   geom_line() +
-  labs(title = "Daily Temperature Trends (2020 vs. 2024)", 
+  labs(title = "Daily Max. Temperature Trends (2020 vs. 2024)", 
        x = "Date", y = "Temperature (°C)") +
   theme_minimal()
 
 # Highcharter - interactive version
 
 
-hchart(df_2020_daily, "line", hcaes(x=time, y=temperature), name = "2020 Daily Avg. Temperature", showInLegend = TRUE) |> 
-  hc_add_series(df_2024_daily,"line", hcaes(x=time, y=temperature), name = "2024 Daily Avg. Temperature", showInLegend = TRUE)
+hchart(df_2020_daily, "line", hcaes(x=time, y=temperature), name = "2020 Daily Max. Temperature", showInLegend = TRUE) |> 
+  hc_add_series(df_2024_daily,"line", hcaes(x=time, y=temperature), name = "2024 Daily Max. Temperature", showInLegend = TRUE)
   
 
 ```
