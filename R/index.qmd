@@ -64,7 +64,7 @@ df_2024$time <- as.Date(df_2024$time)
 df_2020$temperature_2m_C <- as.numeric(df_2020$temperature_2m_C)
 df_2024$temperature_2m_C <- as.numeric(df_2024$temperature_2m_C)
 
-# Aggregate by daily max
+# Aggregate by daily temp max
 df_2020_daily <- df_2020 |> 
   group_by(time) |> 
   summarise(temperature = max(temperature_2m_C, na.rm = TRUE))
@@ -72,6 +72,12 @@ df_2020_daily <- df_2020 |>
 df_2024_daily <- df_2024 |> 
   group_by(time) |> 
   summarise(temperature = max(temperature_2m_C, na.rm = TRUE))
+
+# Aggregate 2024 data by max relative humidity and dew point
+humdew_max_2024 <- df_2024 |> 
+  group_by(time) |> 
+  summarise(humidity = max(relative_humidity_2m, na.rm = TRUE),
+            dew_point = max(dew_point_2m_C, na.rm = TRUE))
 
 # Merge data for plotting
 df_daily <- bind_rows(
@@ -84,11 +90,13 @@ df_2020_daily <- na.omit(df_2020_daily)
 df_2024_daily <- na.omit(df_2024_daily)
 
 df_daily <- na.omit(df_daily)
+humdew_max_2024 <- na.omit(humdew_max_2024)
 
 # Write csv for the key dataframes for easy reference later
 # write.csv(df_2020_daily,"./data/kiziri/kiziri_daily_temp_2020.csv")
 # write.csv(df_2024_daily,"./data/kiziri/kiziri_daily_temp_2024.csv")
 # write.csv(df_daily,"./data/kiziri/kiziri_daily_temp_2020_2024.csv")
+# write.csv(humdew_max_2024,"./data/kiziri/kiziri_humdew_max_2024.csv")
 
 
 # GG Plot - static version
