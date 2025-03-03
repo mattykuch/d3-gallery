@@ -80,15 +80,68 @@ async function drawScatter2024() {
     // 5 Draw data
     // 5.1 Generate the scatter points/dots by creating circles for each data point
 
-    const dots = bounds.selectAll("circle")
-    .data(humdew2024)
-    .enter().append("circle")
-      .attr("cx", d => xScale(xAccessor(d)))
-      .attr("cy", d => yScale(yAccessor(d)))
-      .attr("r", 4)
-      .attr("fill", "cornflowerblue")
+    // const dots = bounds.selectAll("circle")
+    // .data(humdew2024)
+    // .enter().append("circle")
+    //   .attr("cx", d => xScale(xAccessor(d)))
+    //   .attr("cy", d => yScale(yAccessor(d)))
+    //   .attr("r", 4)
+    //   .attr("fill", "cornflowerblue")
+
+    function drawDots(dataset, color) { // function that draws dots and can be called on any dataset and color
+
+      const dots = bounds.selectAll("circle").data(dataset)
+
+      dots.enter().append("circle")
+        .attr("cx", d => xScale(xAccessor(d)))
+        .attr("cy", d => yScale(yAccessor(d)))
+        .attr("r", 4)
+        .attr("fill", color)
+
+    
+    }
+
+    drawDots(humdew2024.slice(0, 200), "darkgrey") // selets only first 200 dots
+
+    setTimeout(() => { // Creates a small transition effect after 1 second
+      drawDots(humdew2024, "cornflowerblue") // Each time we run drawDots(), we’re setting the color of only new circles. This explains why the grey dots stay grey
+      }, 1000)
 
     // 6. Draw peripherals i.e. axes
+
+    const xAxisGenerator = d3.axisBottom()
+    .scale(xScale)
+
+  const xAxis = bounds.append("g")
+    .call(xAxisGenerator)
+      .style("transform", `translateY(${dimensions.boundedHeight}px)`)
+
+  const xAxisLabel = xAxis.append("text")
+      .attr("x", dimensions.boundedWidth / 2)
+      .attr("y", dimensions.margin.bottom - 10)
+      .attr("fill", "black")
+      .style("font-size", "1.4em")
+      .html("Dew point (&deg;C)")
+
+  const yAxisGenerator = d3.axisLeft()
+    .scale(yScale)
+    .ticks(4)
+
+  const yAxis = bounds.append("g")
+      .call(yAxisGenerator)
+
+  const yAxisLabel = yAxis.append("text")
+      .attr("x", -dimensions.boundedHeight / 2)
+      .attr("y", -dimensions.margin.left + 10)
+      .attr("fill", "black")
+      .style("font-size", "1.4em")
+      .text("Relative humidity")
+      .style("transform", "rotate(-90deg)")
+      .style("text-anchor", "middle")
+
+
+
+
 
 }
 
