@@ -7,12 +7,14 @@ async function drawScatter2024() {
 
     // 1.2 Create Accessor for y and x data points
 
-    yAccessor = d => d.humidity    
-    xAccessor = d => d.dew_point
+    const yAccessor = d => d.humidity    
+    const xAccessor = d => d.dew_point
+    const colorAccessor = d => d.cloud_cover
 
     // console.log(yAccessor(humdew2024[0])); // confirm by console loging
 
     // console.log(xAccessor(humdew2024[0])); // confirm by console loging
+    // console.log(colorAccessor(humdew2024[0])); // confirm by console loging
 
     // 2. Create chart dimensions
     // 2.1 Store the dimensions that wraps around the 1st layer "wrapper" of the chart (width, height and margins) in an array
@@ -64,7 +66,7 @@ async function drawScatter2024() {
       .range([dimensions.boundedHeight, 0]) // Outputs the max Height value "boundedHeight" of our screen dimension within the bounded area
       .nice() // a d3 function that rounds up the scales domain
     
-      console.log(d3.extent(humdew2024, yAccessor)); // confirm by console logging it
+    //  console.log(d3.extent(humdew2024, yAccessor)); // confirm by console logging it
     
 
     // 4.3 Creating the xScale with d3.scaleLinear also
@@ -74,7 +76,16 @@ async function drawScatter2024() {
       .range([0, dimensions.boundedWidth])  // Outputs the max Width value "boundedWidth" of our screen dimension within the bounded area
       .nice()
 
-     console.log(d3.extent(humdew2024, xAccessor)); // confirm by console logging it
+    // console.log(d3.extent(humdew2024, xAccessor)); // confirm by console logging it
+
+    // 4.4 Creating the colorScale with d3.scaleLinear , once more
+
+    const colorScale = d3.scaleLinear()
+    .domain(d3.extent(humdew2024, colorAccessor))
+    .range(["skyblue", "darkslategrey"])
+
+    // console.log(d3.extent(humdew2024, colorAccessor)); // confirm by console logging it
+
 
 
     // 5 Draw data
@@ -92,20 +103,16 @@ async function drawScatter2024() {
 
       const dots = bounds.selectAll("circle").data(dataset)
 
-      dots.enter().append("circle")
+      dots.join("circle") // .join in more recent D3 version can replace .enter().append() method chain
         .attr("cx", d => xScale(xAccessor(d)))
         .attr("cy", d => yScale(yAccessor(d)))
         .attr("r", 4)
-        .attr("fill", color)
+        .attr("fill", d => colorScale(colorAccessor(d))) // Adding a color gradient
 
     
     }
 
-    drawDots(humdew2024.slice(0, 200), "darkgrey") // selets only first 200 dots
-
-    setTimeout(() => { // Creates a small transition effect after 1 second
-      drawDots(humdew2024, "cornflowerblue") // Each time we run drawDots(), we’re setting the color of only new circles. This explains why the grey dots stay grey
-      }, 1000)
+    drawDots(humdew2024, "darkgrey") // selets only first 200 dots
 
     // 6. Draw peripherals i.e. axes
 
