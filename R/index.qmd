@@ -1,5 +1,5 @@
 ---
-title: <span style="color:white">Weather Patterns in Kiziri - A Tale of Two Years</span>
+title: <span style="color:white">Weather Patterns in Kiziri - A Tale of Three Years</span>
 subtitle: "Understanding the Shifts in Climate at JC Farms"
 
 author: 
@@ -42,7 +42,7 @@ If you were to stand in the middle of **Kiziri**, the neighborhood where **JC Fa
 
 Numbers tell stories, but they whisper at first. Only when you step back do you see the broader picture.
 
-I spent some time analyzing temperature data from **2020** and **2024**—two years, four years apart, but connected by the same land, the same sky. What I found wasn’t just numbers. It was a pattern, a story of change, and perhaps a small warning about what lies ahead.
+I spent some time analyzing temperature data from **2022, 2023** and **2024**—three years, connected by the same land, the same sky. What I found wasn’t just numbers. It was a pattern, a story of change, and perhaps a small warning about what lies ahead.
 
 ```{r}
 # 1. Temperature Trends over time
@@ -50,43 +50,54 @@ I spent some time analyzing temperature data from **2020** and **2024**—two ye
 
 # Load the datasets
 df_2020 <- read.csv("./data/kiziri/open-meteo-0.60N32.66E1137m_2020.csv", skip = 3)
-df_2024 <- read.csv("./data/kiziri/open-meteo-0.60N32.66E1137m_2024.csv", skip = 3)
+df_2022 <- read.csv("./data/kiziri/open-meteo-0.38N32.38E1184m_2022_fixed.csv", skip = 3)
+df_2023 <- read.csv("./data/kiziri/open-meteo-0.38N32.38E1184m_2023_fixed.csv", skip = 3)
+df_2024 <- read.csv("./data/kiziri/open-meteo-0.38N32.38E1184m_2024_fixed.csv", skip = 3)
 
 # Rename columns
-colnames(df_2020) <- colnames(df_2024) <- c("time", "temperature_2m_C", "relative_humidity_2m", 
-                                            "dew_point_2m_C", "precipitation_mm", "rain_mm")
+colnames(df_2022) <- colnames(df_2023)<- colnames(df_2024) <- c("time", "temperature_2m_C", "relative_humidity_2m","dew_point_2m_C","apparent_temp_C", "rain_mm","cloud_cover","wind_gusts_10m_kph")
 
 # Convert time column to Date format
-df_2020$time <- as.Date(df_2020$time)
+df_2022$time <- as.Date(df_2022$time)
+df_2023$time <- as.Date(df_2023$time)
 df_2024$time <- as.Date(df_2024$time)
 
 # Convert the temperature column to numeric
-df_2020$temperature_2m_C <- as.numeric(df_2020$temperature_2m_C)
-df_2024$temperature_2m_C <- as.numeric(df_2024$temperature_2m_C)
+df_2022$apparent_temp_C <- as.numeric(df_2022$apparent_temp_C)
+df_2023$apparent_temp_C <- as.numeric(df_2023$apparent_temp_C)
+df_2024$apparent_temp_C <- as.numeric(df_2024$apparent_temp_C)
 
-# Aggregate by daily temp max
-df_2020_daily <- df_2020 |> 
+
+# Aggregate by daily maximum tempature for 2022-2024
+df_2022_daily <- df_2022 |> 
   group_by(time) |> 
-  summarise(temperature = max(temperature_2m_C, na.rm = TRUE))
+  summarise(temperature = max(apparent_temp_C, na.rm = TRUE))
+
+df_2023_daily <- df_2023 |> 
+  group_by(time) |> 
+  summarise(temperature = max(apparent_temp_C, na.rm = TRUE))
 
 df_2024_daily <- df_2024 |> 
   group_by(time) |> 
-  summarise(temperature = max(temperature_2m_C, na.rm = TRUE))
+  summarise(temperature = max(apparent_temp_C, na.rm = TRUE))
 
 # Aggregate 2024 data by max relative humidity and dew point
 humdew_max_2024 <- df_2024 |> 
   group_by(time) |> 
-  summarise(humidity = max(relative_humidity_2m, na.rm = TRUE),
-            dew_point = max(dew_point_2m_C, na.rm = TRUE))
+  summarise(humidity = mean(relative_humidity_2m, na.rm = TRUE),
+            dew_point = mean(dew_point_2m_C, na.rm = TRUE),
+            cloud_cover = mean(cloud_cover, na.rm = TRUE))
 
 # Merge data for plotting
 df_daily <- bind_rows(
-  mutate(df_2020_daily, year = "2020"),
+  mutate(df_2022_daily, year = "2022"),
+  mutate(df_2023_daily, year = "2023"),
   mutate(df_2024_daily, year = "2024")
 )
 
-# Drop the NA in the df
-df_2020_daily <- na.omit(df_2020_daily)
+# Drop the NA in the df, if any
+df_2022_daily <- na.omit(df_2022_daily)
+df_2023_daily <- na.omit(df_2023_daily)
 df_2024_daily <- na.omit(df_2024_daily)
 
 df_daily <- na.omit(df_daily)
@@ -94,32 +105,29 @@ humdew_max_2024 <- na.omit(humdew_max_2024)
 
 # Write csv for the key dataframes for easy reference later
 # write.csv(df_2020_daily,"./data/kiziri/kiziri_daily_temp_2020.csv")
-# write.csv(df_2024_daily,"./data/kiziri/kiziri_daily_temp_2024.csv")
-# write.csv(df_daily,"./data/kiziri/kiziri_daily_temp_2020_2024.csv")
-# write.csv(humdew_max_2024,"./data/kiziri/kiziri_humdew_max_2024.csv")
+ write.csv(df_2022_daily,"./data/kiziri/kiziri_daily_max_temp_2022.csv")
+ write.csv(df_2023_daily,"./data/kiziri/kiziri_daily_max_temp_2023.csv")
+ write.csv(df_2024_daily,"./data/kiziri/kiziri_daily_max_temp_2024.csv")
+ write.csv(df_daily,"./data/kiziri/kiziri_daily_max_temp_2022_2024.csv")
+ write.csv(humdew_max_2024,"./data/kiziri/kiziri_humdew_max_2024.csv")
 
 
 # GG Plot - static version
 ggplot(df_daily, aes(x = time, y = temperature, color = year)) +
   geom_line() +
-  labs(title = "Daily Max. Temperature Trends (2020 vs. 2024)", 
+  labs(title = "Daily Max. Temperature Trends (2022 - 2024)", 
        x = "Date", y = "Temperature (°C)") +
   theme_minimal()
 
 # Highcharter - interactive version
 
 
-hchart(df_2020_daily, "line", hcaes(x=time, y=temperature), name = "2020 Daily Max. Temperature", showInLegend = TRUE) |> 
+hchart(df_2022_daily, "line", hcaes(x=time, y=temperature), name = "2022 Daily Max. Temperature", showInLegend = TRUE) |> 
+  hc_add_series(df_2023_daily,"line", hcaes(x=time, y=temperature), name = "2023 Daily Max. Temperature", showInLegend = TRUE) |> 
   hc_add_series(df_2024_daily,"line", hcaes(x=time, y=temperature), name = "2024 Daily Max. Temperature", showInLegend = TRUE)
   
 
 ```
-
-### **A Slightly Warmer Kiziri**
-
-One number stands out: **22.2°C**. That’s the average temperature recorded in Kiziri in **2024**, compared to **21.5°C** in 2020. At first glance, a difference of **0.7°C** may seem trivial. But when you’re running a poultry farm, where temperature consistency can mean the difference between efficient feed conversion and heat stress in birds, it’s the kind of number that makes you pay attention.
-
-More importantly, the **standard deviation (variability) of temperatures increased** in 2024, meaning the swings between hot and cool days were more extreme. Poultry thrives in consistency—climate change, however, has other plans.
 
 ### **The Shape of the Year: Monthly Temperature Trends**
 
@@ -130,19 +138,19 @@ More importantly, the **standard deviation (variability) of temperatures increas
 
 Breaking the data down by month, a clear pattern emerged:
 
--   **2024 was generally warmer than 2020 across most months.**
+-   **2022 was generally warmer than 2023 and 2024 across most months.**
 
 -   The biggest temperature spikes happened in the **dry season months of January and February**, and again in **June and July**.
 
--   Interestingly, **March and April 2024 saw slightly cooler temperatures** than their 2020 counterparts—possibly a sign of increased rainfall, though that’s another dataset worth exploring.
+-   Interestingly, **March and April 2024 saw slightly cooler temperatures** than their 2022 counterparts—possibly a sign of increased rainfall, though that’s another dataset worth exploring.
 
 If you run a farm, this kind of information matters. Birds drink more water and eat less when it’s too hot. Heat stress can impact egg production, meat quality, and overall farm output. A shift of even a degree, when compounded over an entire season, can change productivity in ways that don’t always show up on a balance sheet—until they do.
 
 ### **The New Normal: Extreme Temperature Events**
 
-Perhaps the most alarming change was in **temperature extremes**. In 2020, there were occasional spikes above **30°C**, but in 2024, these spikes became more frequent and prolonged.
+Perhaps the most alarming change was in **temperature extremes**. In 2022, there were several spikes above **35°C**, which have continued in 2023, but no in 2024.
 
-A good example: On **January 7, 2024**, temperatures hit **31.5°C**—higher than anything recorded on that same date four years earlier. That might not sound dramatic, but when it happens consistently, it changes everything.
+A good example: On **March 9, 2022**, temperatures hit **38.6°C**—higher than anything recorded up to that point and since. That might not sound dramatic, but when it happens consistently, it changes everything.
 
 Think about how chickens react to extreme heat. Unlike humans, they can’t sweat to cool off. Instead, they pant, reduce movement, and eat less—responses that make sense for survival but are disastrous for farm productivity.
 
