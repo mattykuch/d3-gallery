@@ -105,11 +105,11 @@ humdew_max_2024 <- na.omit(humdew_max_2024)
 
 # Write csv for the key dataframes for easy reference later
 # write.csv(df_2020_daily,"./data/kiziri/kiziri_daily_temp_2020.csv")
- write.csv(df_2022_daily,"./data/kiziri/kiziri_daily_max_temp_2022.csv")
- write.csv(df_2023_daily,"./data/kiziri/kiziri_daily_max_temp_2023.csv")
- write.csv(df_2024_daily,"./data/kiziri/kiziri_daily_max_temp_2024.csv")
- write.csv(df_daily,"./data/kiziri/kiziri_daily_max_temp_2022_2024.csv")
- write.csv(humdew_max_2024,"./data/kiziri/kiziri_humdew_max_2024.csv")
+# write.csv(df_2022_daily,"./data/kiziri/kiziri_daily_max_temp_2022.csv")
+# write.csv(df_2023_daily,"./data/kiziri/kiziri_daily_max_temp_2023.csv")
+# write.csv(df_2024_daily,"./data/kiziri/kiziri_daily_max_temp_2024.csv")
+# write.csv(df_daily,"./data/kiziri/kiziri_daily_max_temp_2022_2024.csv")
+# write.csv(humdew_max_2024,"./data/kiziri/kiziri_humdew_max_2024.csv")
 
 
 # GG Plot - static version
