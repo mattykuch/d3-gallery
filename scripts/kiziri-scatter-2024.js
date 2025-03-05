@@ -146,6 +146,17 @@ async function drawScatter2024() {
       .style("transform", "rotate(-90deg)")
       .style("text-anchor", "middle")
 
+// 6.2 Labelling axes and other text
+
+
+bounds
+.append("text")
+.text("2024")
+.attr("x", dimensions.width/6)
+.attr("y", dimensions.height/5)
+.style("opacity", 0.2)
+.style("font-size","100px");
+
 
 
 
