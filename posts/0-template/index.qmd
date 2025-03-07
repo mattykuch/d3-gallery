@@ -1,0 +1,46 @@
+---
+title: <span style="color:white">Blog Title</span>
+subtitle: "Sub-title"
+
+author: 
+- name: "Matthew Kuch"
+  email: kuch.matthew@gmail.com
+date: 03/07/2025
+
+title-block-banner: true
+title-block-banner-color: "#2c3e50"
+
+
+format: html
+html:
+code-fold: false
+code-summary: "Code"
+execute: 
+  warning: false
+  message: false
+  echo: false
+css: style.css
+toc: true
+toc-location: left
+number-sections: false
+editor: visual
+fig-cap-location: margin
+---
+
+```{r warning=FALSE, message=FALSE}
+
+# Load necessary packages
+library(tidyverse)
+library(lubridate)
+library(highcharter)
+
+
+```
+
+*"Relevant Quote"* – Author
+
+...
+
+# References/Sources/Citations:
+
+-   ...
