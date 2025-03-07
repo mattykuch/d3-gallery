@@ -13,6 +13,15 @@ title-block-banner-color: "#2c3e50"
 
 format: html
 html:
+other-links:
+    - text: Home
+      href: https://mattykuch.github.io/d3-gallery/index.html
+    - text: About
+      href: https://mattykuch.github.io/d3-gallery/about.html
+    - text: Blog
+      href: https://mattykuch.github.io/d3-gallery/blog.html
+    - text: GitHub
+      href: https://github.com/mattykuch
 code-fold: false
 code-summary: "Code"
 execute: 
